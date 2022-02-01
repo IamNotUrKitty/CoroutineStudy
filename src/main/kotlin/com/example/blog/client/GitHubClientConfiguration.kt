@@ -10,6 +10,6 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class GitHubClientConfiguration(
 ) {
-    @Bean
-    fun gitHubApi() = Feign.builder().encoder(GsonEncoder()).decoder(GsonDecoder()).target(GitHubApi::class.java, "https://api.github.com")!!
+  @Bean
+  fun gitHubApi() = Feign.builder().encoder(GsonEncoder()).decoder(GsonDecoder()).target(GitHubApi::class.java, "https://api.github.com")!!
 }

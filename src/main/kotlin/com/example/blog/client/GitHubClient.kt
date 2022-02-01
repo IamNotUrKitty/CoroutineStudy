@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class GitHubClient(
-        private val gitHubApi: GitHubApi
+  private val gitHubApi: GitHubApi
 ) {
-    suspend fun _getUser(id: String): GitHubUser = withContext(Dispatchers.IO) { gitHubApi.getUser(id) }
+  suspend fun _getUser(id: String): GitHubUser = withContext(Dispatchers.IO) { gitHubApi.getUser(id) }
 }
