@@ -9,44 +9,40 @@ import kotlin.system.measureTimeMillis
 
 @RestController
 class TestController(
-  private val gitHubClient: GitHubClient
+    private val gitHubClient: GitHubClient
 ) {
   suspend fun getUser(id: String): GitHubUser {
     val user: GitHubUser
     val time = measureTimeMillis {
-      println("User with $id requested")
+      println("User with id=$id requested")
       user = gitHubClient._getUser(id)
-      println("User with $id received")
+      println("User with id=$id received")
     }
 
-    println("User with $id received in $time ms")
+    println("User with id=$id received in $time ms")
+    println()
 
     return user
   }
 
   @GetMapping("/")
-  fun test(): List<GitHubUser> {
+  suspend fun test(): List<GitHubUser> = coroutineScope {
     var returnList: List<GitHubUser> = emptyList()
-    runBlocking<Unit> {
 
-
-//      repeat(10) {
-        val timeBlock = measureTimeMillis {
-          val list = setOf( "iamnoturkitty", "jongleb", "gaearon").map { getUser(it) }
-
-        }
-        println("Completed blocking in $timeBlock ms")
-
-        val time = measureTimeMillis {
-           returnList = setOf( "iamnoturkitty", "jongleb", "gaearon").map { async { getUser(it) } }.awaitAll()
-
-        }
-        println("Completed in $time ms")
-
-        println("Diff time = ${timeBlock - time}")
-//      }
+    val timeBlock = measureTimeMillis {
+      returnList = setOf("iamnoturkitty", "elizarov").map { getUser(it) }
     }
+    println("Completed blocking in $timeBlock ms")
+    println("====================================")
 
-    return returnList
+    val time = measureTimeMillis {
+      returnList = setOf("iamnoturkitty", "elizarov", "26", "21", "1").map { async { getUser(it) } }.awaitAll()
+
+    }
+    println("Completed in $time ms")
+
+    println("Diff time = ${timeBlock - time}")
+
+    returnList
   }
 }
